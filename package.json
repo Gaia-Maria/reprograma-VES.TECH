@@ -16,5 +16,12 @@
   "bugs": {
     "url": "https://github.com/Gaia-Maria/ProjetoFinal-Ves.tech/issues"
   },
-  "homepage": "https://github.com/Gaia-Maria/ProjetoFinal-Ves.tech#readme"
+  "homepage": "https://github.com/Gaia-Maria/ProjetoFinal-Ves.tech#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.18"
+  }
 }
