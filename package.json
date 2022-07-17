@@ -11,15 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Gaia-Maria/ProjetoFinal-Ves.tech.git"
+    "url": "git+https://github.com/Gaia-Maria/reprograma-VES.TECH"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Gaia-Maria/ProjetoFinal-Ves.tech/issues"
+    "url": "https://github.com/Gaia-Maria/reprograma-VES.TECH/issues"
   },
-  "homepage": "https://github.com/Gaia-Maria/ProjetoFinal-Ves.tech#readme",
+  "homepage": "https://github.com/Gaia-Maria/reprograma-VES.TECH#readme",
   "dependencies": {
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
