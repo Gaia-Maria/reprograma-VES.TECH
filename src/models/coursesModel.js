@@ -1,9 +1,10 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
-const courseSchema = mongoose.Schema({
+const courseSchema = mongoose.Schema(
+  {
     _id: {
       type: mongoose.Schema.Types.ObjectId,
-      default: mongoose.Types.ObjectId
+      default: mongoose.Types.ObjectId,
     },
     courseTitle: { type: String, required: true, unique: true },
     affirmativePolicies: { type: [String], required: true },
@@ -20,9 +21,11 @@ const courseSchema = mongoose.Schema({
     institutionID: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: "institution"
+      ref: "institution",
     },
-  }, { timestamp: true });
+  },
+  { timestamp: true }
+);
 
 const Model = mongoose.model("course", courseSchema);
 

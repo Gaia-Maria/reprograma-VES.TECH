@@ -1,71 +1,67 @@
-const institutionsModel = require("../src/models/institutionsModel")
+const institutionsModel = require("../src/models/institutionsModel");
 
 describe("GET route", () => {
-    const institution = new institutionsModel({
+  const institution = new institutionsModel({
     institution: "nome teste",
     site: "http://localhost:3301/my-documentation/#/",
     email: "http://emailteste@gmail.com",
-    description: "instituição de tecnologia"
-});
-    it("Deve chamar o schema e retornar o nome correto do curso", () => {
-        expect(institution.institution).toBe("nome teste");
-    });
-    it("Deve chamar o schema e retornar o site", () => {
-        expect(institution.site).toBe("http://localhost:3301/my-documentation/#/");
-    });
-    it("Deve chamar o schema e retornar o email", () => {
-        expect(institution.email).toBe("http://emailteste@gmail.com");
-    });
-    it("Deve chamar o schema e retornar a descrição correta", () => {
-        expect(institution.description).toBe("instituição de tecnologia");
-    });
+    description: "instituição de tecnologia",
+  });
+  it("Must call schema and return correct course name", () => {
+    expect(institution.institution).toBe("nome teste");
+  });
+  it("Must call schema and return correct site", () => {
+    expect(institution.site).toBe("http://localhost:3301/my-documentation/#/");
+  });
+  it("Must call schema and return correct email", () => {
+    expect(institution.email).toBe("http://emailteste@gmail.com");
+  });
+  it("Must call schema and return correct description", () => {
+    expect(institution.description).toBe("instituição de tecnologia");
+  });
 });
 
 describe("CREATE route test", () => {
-    const institution = new institutionsModel({
-        institution: "nome teste",
-        site: "http://localhost:3301/my-documentation/#/",
-        email: "http://emailteste@gmail.com",
-        description: "instituição de tecnologia"
+  const institution = new institutionsModel({
+    institution: "nome teste",
+    site: "http://localhost:3301/my-documentation/#/",
+    email: "http://emailteste@gmail.com",
+    description: "instituição de tecnologia",
+  });
+  it("The new institution must be saved in the database", () => {
+    institution.save().then((dados) => {
+      expect(dados.title).toBe("nome teste");
     });
-    it("Deve salvar no banco de dados a nova instituição", () => {
-        institution.save().then((dados) => {
-            expect(dados.title).toBe("nome teste");
-        });
-        
-    });
-})
-
+  });
+});
 
 describe("UPDATE route test", () => {
-    it("Deve editar o titulo da instituição", () => {
-        const institution = new institutionsModel({
-            institution: "nome teste",
-            site: "http://localhost:3301/my-documentation/#/",
-            email: "http://emailteste@gmail.com",
-            description: "instituição de tecnologia"
-        });
-        institution.title = "nova instituição"
-        institution.save().then((dados) => {
-            expect(dados.title).toBe("nova instituição");
-        });
-        
+  it("You must edit the institution's title", () => {
+    const institution = new institutionsModel({
+      institution: "nome teste",
+      site: "http://localhost:3301/my-documentation/#/",
+      email: "http://emailteste@gmail.com",
+      description: "instituição de tecnologia",
     });
-})
+    institution.title = "nova instituição";
+    institution.save().then((dados) => {
+      expect(dados.title).toBe("nova instituição");
+    });
+  });
+});
 
 describe("DELETE route test", () => {
-    it("Deve excluir a instituição", () => {
-        const institution = new institutionsModel({
-            institution: "nome teste",
-            site: "http://localhost:3301/my-documentation/#/",
-            email: "http://emailteste@gmail.com",
-            description: "instituição de tecnologia"
-        });
-        institution.save().then((dados) => {
-            institution.delete().then((novosdados) =>{
-                expect(dados.title).toBe(null);
-            })
-        });
-        
+  it("Must delete institution from database", () => {
+    const institution = new institutionsModel({
+      institution: "nome teste",
+      site: "http://localhost:3301/my-documentation/#/",
+      email: "http://emailteste@gmail.com",
+      description: "instituição de tecnologia",
     });
-})
+    institution.save().then((dados) => {
+      institution.delete().then((novosdados) => {
+        expect(dados.title).toBe(null);
+      });
+    });
+  });
+});

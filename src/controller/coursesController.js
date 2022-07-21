@@ -5,19 +5,9 @@ const SECRET = process.env.SECRET;
 
 const getAllCourses = async (req, res) => {
   try {
-    const authHeader = req.get("authorization");
-    if (!authHeader) {
-      return res.status(401).send("You need an authorization");
-    }
-    const token = authHeader.split(" ")[1];
-    await jwt.verify(token, SECRET, async function (erro) {
-      if (erro) {
-        return res.status(403).send("Access denied");
-      }
-      const allCourses = await CoursesModel.find().populate("institution");
-      res.status(200).json(allCourses);
-    });
-  } catch {
+    const allCourses = await CoursesModel.find({}, null);
+    res.status(200).json(allCourses);
+  } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
@@ -34,9 +24,9 @@ const getCourseById = async (req, res) => {
         return res.status(403).send("Access denied");
       }
       const { id } = req.params;
-      const findCourse = await CoursesModel.findById(id)
+      const findCourse = await CoursesModel.findById(id);
       if (findCourse == null) {
-        res.status(404).json({ message: "Id not found" });
+        res.status(404).json({ message: "ID not found" });
       }
       res.status(200).json(findCourse);
     });
@@ -45,7 +35,7 @@ const getCourseById = async (req, res) => {
   }
 };
 
-const getByCourseTitle = async (req, res) => {
+const getCourseByTitle = async (req, res) => {
   try {
     const authHeader = req.get("authorization");
     if (!authHeader) {
@@ -56,8 +46,8 @@ const getByCourseTitle = async (req, res) => {
       if (erro) {
         return res.status(403).send("Access denied");
       }
-      const { courseTitle } = req.query
-      const findCourse = await CoursesModel.find({ courseTitle: courseTitle}, null, {sort: "date"})
+      const { courseTitle } = req.query;
+      const findCourse = await CoursesModel.find({ courseTitle: courseTitle });
 
       if (findCourse == null) {
         res.status(404).json({ message: "Course not found" });
@@ -69,7 +59,7 @@ const getByCourseTitle = async (req, res) => {
   }
 };
 
-const getByAffirativePolicies = async (req, res) => {
+const getByAffirmativePolicies = async (req, res) => {
   try {
     const authHeader = req.get("authorization");
     if (!authHeader) {
@@ -80,13 +70,18 @@ const getByAffirativePolicies = async (req, res) => {
       if (erro) {
         return res.status(403).send("Access denied");
       }
-      const { affirativePolicies } = req.query
-      const findAffirativePolicies = await CoursesModel.find({ affirativePolicies: affirativePolicies}, null, {sort: "date"})
+      const { affirmativePolicies } = req.query;
+      const findAffirmativePolicies = await CoursesModel.find({
+        affirmativePolicies: affirmativePolicies,
+      });
 
-      if (findAffirativePolicies == null) {
-        res.status(404).json({ message: "There are no courses registred for this affirative policies",  message: affirativePolicies});
+      if (findAffirmativePolicies == null) {
+        res.status(404).json({
+            message:
+              "There are no courses registred for this affirative policies",
+          });
       }
-      res.status(200).json(findAffirativePolicies);
+      res.status(200).json(findAffirmativePolicies);
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -104,7 +99,10 @@ const getAllAvailableCourses = async (req, res) => {
       if (erro) {
         return res.status(403).send("Access denied");
       }
-      const findAvailability = await CoursesModel.find({available: true}, null, {sort: "date"})
+      const findAvailability = await CoursesModel.find({ available: true });
+      if (findAvailability == null) {
+        res.status(404).json({ message: "This is not a valid command" });
+      }
       res.status(200).json(findAvailability);
     });
   } catch (error) {
@@ -123,7 +121,10 @@ const getAllUnavailableCourses = async (req, res) => {
       if (erro) {
         return res.status(403).send("Access denied");
       }
-      const findUnavailability = await CoursesModel.find({available: false}, null, {sort: "date"})
+      const findUnavailability = await CoursesModel.find({ available: false });
+      if (findUnavailability == null) {
+        res.status(404).json({ message: "This is not a valid command" });
+      }
       res.status(200).json(findUnavailability);
     });
   } catch (error) {
@@ -142,11 +143,13 @@ const getCourseByCategory = async (req, res) => {
       if (erro) {
         return res.status(403).send("Access denied");
       }
-      const { category } = req.query
-      const findCategory = await CoursesModel.find({ category: category}, null, {sort: "date"})
+      const { category } = req.query;
+      const findCategory = await CoursesModel.find({ category: category });
 
       if (findCategory == null) {
-        res.status(404).json({ message: "There are no courses registred for this category" });
+        res.status(404).json({
+            message: "There are no courses registred for this category",
+          });
       }
       res.status(200).json(findCategory);
     });
@@ -155,7 +158,7 @@ const getCourseByCategory = async (req, res) => {
   }
 };
 
-const getCourseByCategoryAndAffirativePolicies = async (req, res) => {
+const getCourseByCategoryAndAffirmativePolicies = async (req, res) => {
   try {
     const authHeader = req.get("authorization");
     if (!authHeader) {
@@ -166,14 +169,19 @@ const getCourseByCategoryAndAffirativePolicies = async (req, res) => {
       if (erro) {
         return res.status(403).send("Access denied");
       }
-      const { category } = req.query
-      const { affirativePolicies } = req.query
-      const findCategory = await CoursesModel.find({ category: category, affirativePolicies: affirativePolicies }, null, {sort: "date"})
+      const { category } = req.query;
+      const { affirativePolicies } = req.query;
+      const findCategoryAndPolicies = await CoursesModel.find({
+        category: category,
+        affirativePolicies: affirativePolicies,
+      });
 
-      if (findCategory == null) {
-        res.status(404).json({ message: "There are no courses registred for this category" });
+      if (findCategoryAndPolicies == null) {
+        res.status(404).json({
+            message: "There are no courses registred for this category",
+          });
       }
-      res.status(200).json(findCategory);
+      res.status(200).json(findCategoryAndPolicies);
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -193,32 +201,31 @@ const createCourse = async (req, res) => {
       }
       const {
         courseTitle,
-        affirativePolicies,
+        affirmativePolicies,
         available,
         startDate,
         finishDate,
         category,
         description,
+        institutionID,
       } = req.body;
 
-      if (!institutionId) {
-        return res
-          .status(400)
-          .json({ message: "The institution Id is required" });
+      if (!institutionID) {
+        return res.status(400).json({ message: "The institution Id is required" });
       }
-      const findInstitution = await InstitutionModel.findById(institutionId);
+      const findInstitution = await InstitutionModel.findById(institutionID);
       if (!findInstitution) {
         return res.status(404).json({ message: "Institution not found" });
       }
       const newCourse = new CoursesModel({
-        institution: institutionId,
         courseTitle,
-        affirativePolicies,
+        affirmativePolicies,
         available,
         startDate,
         finishDate,
         category,
         description,
+        institutionID,
       });
       const savedCourse = await newCourse.save();
       res.status(200).json(savedCourse);
@@ -242,14 +249,14 @@ const updateCourseById = async (req, res) => {
       }
       const { id } = req.params;
       const {
-        institutionId,
         courseTitle,
-        affirativePolicies,
+        affirmativePolicies,
         available,
         startDate,
         finishDate,
         category,
         description,
+        institutionId,
       } = req.body;
       const findCourse = await CoursesModel.findById(id);
       if (findCourse == null) {
@@ -263,13 +270,13 @@ const updateCourseById = async (req, res) => {
         }
       }
       findCourse.courseTitle = courseTitle || findCourse.courseTitle;
-      findCourse.affirativePolicies = affirativePolicies || findCourse.affirativePolicies;
+      findCourse.affirmativePolicies = affirmativePolicies || findCourse.affirmativePolicies;
       findCourse.available = available || findCourse.available;
       findCourse.startDate = startDate || findCourse.startDate;
       findCourse.finishDate = finishDate || findCourse.finishDate;
       findCourse.category = category || findCourse.category;
       findCourse.description = description || findCourse.description;
-      findCourse.institution = institutionId || findCourse.institution;
+      findCourse.institutionId = institutionId || findCourse.institutionId;
       const savedCourse = await findCourse.save();
       res.status(200).json(savedCourse);
     });
@@ -292,14 +299,10 @@ const deleteCourseById = async (req, res) => {
       const { id } = req.params;
       const findCourse = await CoursesModel.findById(id);
       if (findCourse == null) {
-        return res
-          .status(404)
-          .json({ message: `Course with id ${id} not found` });
+        return res.status(404).json({ message: `Course with id ${id} not found` });
       }
       await findCourse.remove();
-      res
-        .status(200)
-        .json({ message: `Course with id ${id} was successfully deleted` });
+      res.status(200).json({ message: `Course with id ${id} was successfully deleted` });
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -309,13 +312,13 @@ const deleteCourseById = async (req, res) => {
 module.exports = {
   getAllCourses,
   getCourseById,
-  getByCourseTitle,
-  getByAffirativePolicies,
+  getCourseByTitle,
+  getByAffirmativePolicies,
   getAllAvailableCourses,
   getAllUnavailableCourses,
   getCourseByCategory,
-  getCourseByCategoryAndAffirativePolicies,
+  getCourseByCategoryAndAffirmativePolicies,
   createCourse,
   updateCourseById,
-  deleteCourseById
+  deleteCourseById,
 };

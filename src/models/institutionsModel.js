@@ -1,9 +1,10 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
-const institutionSchema = mongoose.Schema({
-  _id: {
-    type: mongoose.Schema.Types.ObjectId,
-    default: mongoose.Types.ObjectId
+const institutionSchema = mongoose.Schema(
+  {
+    _id: {
+      type: mongoose.Schema.Types.ObjectId,
+      default: mongoose.Types.ObjectId,
     },
     institution: { type: String, required: true, unique: true },
     site: { type: String, pattern: true, required: true },

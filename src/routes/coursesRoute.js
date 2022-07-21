@@ -2,16 +2,16 @@ const controller = require("../controller/coursesController");
 const express = require("express");
 const router = express.Router();
 
-router.get("/users/courses", controller.getAllCourses);
+router.get("/courses", controller.getAllCourses);
+router.get("/courses/coursetitle", controller.getCourseByTitle);
+router.get("/courses/affirmativepolicies", controller.getByAffirmativePolicies);
+router.get("/courses/available", controller.getAllAvailableCourses);
+router.get("/courses/unavailable", controller.getAllUnavailableCourses);
+router.get("/courses/category", controller.getCourseByCategory);
+router.get("/courses/categoryandaffirmativepolicies",controller.getCourseByCategoryAndAffirmativePolicies);
 router.get("/users/courses/:id", controller.getCourseById);
-router.get("/users/courses/coursetitle", controller.getByCourseTitle);
-router.get("/users/courses/affirmativepolicies",controller.getByAffirativePolicies);
-router.get("/users/courses/available", controller.getAllAvailableCourses);
-router.get("/users/courses/unavailable", controller.getAllUnavailableCourses);
-router.get("/users/courses/category", controller.getCourseByCategory);
-router.get("/users/courses/categoryandaffirativepolicies",controller.getCourseByCategoryAndAffirativePolicies);
 router.post("/institution/course", controller.createCourse);
-router.patch("/institution/course/:id", controller.updateCourseById);
+router.patch("/institution/courses/:id", controller.updateCourseById);
 router.delete("/institution/course/:id", controller.deleteCourseById);
 
 module.exports = router;
