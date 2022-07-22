@@ -6,7 +6,6 @@ router.get("/courses", controller.getAllCourses);
 router.get("/courses/coursetitle", controller.getCourseByTitle);
 router.get("/courses/affirmativepolicies", controller.getByAffirmativePolicies);
 router.get("/courses/available", controller.getAllAvailableCourses);
-router.get("/courses/unavailable", controller.getAllUnavailableCourses);
 router.get("/courses/category", controller.getCourseByCategory);
 router.get("/courses/categoryandaffirmativepolicies",controller.getCourseByCategoryAndAffirmativePolicies);
 router.get("/users/courses/:id", controller.getCourseById);
