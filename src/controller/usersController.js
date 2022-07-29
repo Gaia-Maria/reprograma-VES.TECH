@@ -24,13 +24,28 @@ const allUsers = (req, res) => {
   });
 };
 
+const userById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const findUser = await Users.findById(id);
+    if (!findUser.length) {
+      return res.status(404).json({ message: "ID not found" });
+    }
+    res.status(200).json(findUser);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 const login = (req, res) => {
   Users.findOne({ email: req.body.email }, function (error, user) {
     if (error) {
       return res.status(500).send({ message: "Header not found" });
     }
     if (!user) {
-      return res.status(404).send(`There is no user registered with this email: ${email}`);
+      return res
+        .status(404)
+        .send(`There is no user registered with this email: ${email}`);
     }
     const validPassword = bcrypt.compareSync(req.body.password, user.password);
     if (!validPassword) {
@@ -43,10 +58,20 @@ const login = (req, res) => {
 
 const deleteUser = async (req, res) => {
   try {
-    const { id } = req.params;
-    await Users.findByIdAndDelete(id);
-    const message = `User with ID ${id} was successfully deleted`;
-    res.status(200).json({ message });
+    const authHeader = req.get("authorization");
+    if (!authHeader) {
+      return res.status(401).send("You need an authorization");
+    }
+    const token = authHeader.split(" ")[1];
+    await jwt.verify(token, SECRET, async function (erro) {
+      if (erro) {
+        return res.status(403).send("Access denied");
+      }
+      const { id } = req.params;
+      await Users.findByIdAndDelete(id);
+      const message = `User with ID ${id} was successfully deleted`;
+      res.status(200).json({ message });
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: error.message });
@@ -56,6 +81,7 @@ const deleteUser = async (req, res) => {
 module.exports = {
   createUser,
   allUsers,
+  userById,
   login,
   deleteUser,
 };
